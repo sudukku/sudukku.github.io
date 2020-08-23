@@ -496,9 +496,11 @@
 								//Remove guesses
 								
 								var rel = current_the_cell.related;
+								/*
 								for (var i = 0; i < rel.length; i++) {
 									$cells.find('td').eq(rel[i].id).find('.note-' + Pnumber).remove();
 								}
+								*/
 								current_cell.find('.note').remove();
 
 								current_cell.addClass('active-number solving number-' + Pnumber);
@@ -567,6 +569,18 @@
 						game_end = true; //game end
 					}
 				}/////cell check
+
+				$(window).focus(function() {
+				  //console.log("on");
+				});
+
+				$(window).blur(function() {
+				  	//console.log("out");
+				  	if(!game_end){
+				  		pause();
+				 	 	current_state=-1;
+				    }
+				});
 
 
 /*
