@@ -17,41 +17,126 @@
 
 <body>
 
-	<div class="title-popup">
-		<div class="title-content">
-			<img class="title-img" src="img/titlelogo.png">
-			<div class="title-lv">-난이도-</div>
-			<div class="title-wall"></div>
-			<div class="beginner-btn levelbtn">초심자</div>
-			<div class="easy-btn levelbtn">쉬움</div>
-			<div class="normal-btn levelbtn">중간</div>
-			<div class="hard-btn levelbtn">어려움</div>
-			<div class="title-wall"></div>
-		</div>
-	</div>
+<!--
+    <div class="title-popup">
+        <div class="title-content">
+            <img class="title-img" src="img/titlelogo.png">
+            <div class="title-lv">-난이도-</div>
+            <div class="title-wall"></div>
+            <div class="beginner-btn levelbtn">초심자</div>
+            <div class="easy-btn levelbtn">쉬움</div>
+            <div class="normal-btn levelbtn">중간</div>
+            <div class="hard-btn levelbtn">어려움</div>
+            <div class="title-wall"></div>
+        </div>
+    </div>
+-->
+    <div class="menu-popup">
+        <div class="menu-content">
+            <div class="wall"></div>
+            <div class="menu-title">새로운 게임</div>
+            <div class="wall"></div>
+            <div class="beginner-btn levelbtn">초심자</div>
+            <div class="easy-btn levelbtn">쉬움</div>
+            <div class="normal-btn levelbtn">중간</div>
+            <div class="hard-btn levelbtn">어려움</div>
+            <div class="wall"></div>
+            <div class="menu-title">기타</div>
+            <div class="wall"></div>
+            <div class="reset-btn levelbtn">다시하기</div>
+            <div class="close-btn levelbtn">게임으로</div>
+            
+        </div>
+    </div>
 
-	<div class="menu-popup">
-		<div class="menu-content">
-			<div class="wall"></div>
-			<div class="menu-title">새로운 게임</div>
-			<div class="wall"></div>
-			<div class="beginner-btn levelbtn">초심자</div>
-			<div class="easy-btn levelbtn">쉬움</div>
-			<div class="normal-btn levelbtn">중간</div>
-			<div class="hard-btn levelbtn">어려움</div>
-			<div class="wall"></div>
-			<div class="menu-title">기타</div>
-			<div class="wall"></div>
-			<div class="reset-btn levelbtn">다시하기</div>
-			<div class="close-btn levelbtn">게임으로</div>
-			
-		</div>
-	</div>
 
 	<div id="GameView">
+
+		<div class="sudoku">
+
+
+            <div class="menu menu-top">
+            </div>
+            <table class="toptable">
+                <tbody>
+                    <tr>
+                        <td><img class="menu-btn" src="img/menu.png"><img class="logo" src="img/logo.png"></td>
+                        <td>
+                            <div class="lv-label"></div>
+                        </td>
+                        <td><img class="pause-btn" src="img/resume.png">
+                            <div class="play-record"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="table-container">
+                <table class="block-bg layer">
+
+                </table>
+                <table class="cells layer">
+                    
+                </table>
+
+                <table class="block-border layer">
+
+                </table>
+                <table class="clickables layer">
+                    
+                </table>
+                <div class="overlay layer" style="display: none;">
+                    <div class="message"></div>
+                    <div class="record"></div>
+                    <div class="record-level"></div>
+                </div>
+
+                
+                <div class="pause-screen layer" style="display: block;">
+                    <img class="screen-btn" src="img/resumeL.png">
+                </div>
+            	
+            </div>
+            <div class="menu menu-bottom">
+                <div class="numpad-screen" style="display: block;"></div>
+                <table class="numpad-table">
+                    <tbody>
+                        <tr>
+                            <td><button class="numpad numpad-1" data-number="1">1</button></td>
+                            <td><button class="numpad numpad-2" data-number="2">2</button></td>
+                            <td><button class="numpad numpad-3" data-number="3">3</button></td>
+                            <td><button class="numpad numpad-4" data-number="4">4</button></td>
+                            <td><button class="numpad numpad-5" data-number="5">5</button></td>
+                            <td><button class="numpad numpad-6" data-number="6">6</button></td>
+                            <td><button class="numpad numpad-7" data-number="7">7</button></td>
+                            <td><button class="numpad numpad-8" data-number="8">8</button></td>
+                            <td><button class="numpad numpad-9" data-number="9">9</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="functable">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="funcbtn notebtn"><img class="funcimg noteimg" src="img/noteoff.png">
+                                    <div class="notelv">노트</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="funcbtn erasebtn"><img class="funcimg" src="img/erase.png">
+                                    <div class="eraselv">지우기</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 	</div>
 	
 	<center>
+
+	<br>
 	<div style="width:460px; height: 50px; background:#aaa; ">
 		
 		<ins class="kakao_ad_area" style="display:none;" 
@@ -61,8 +146,10 @@
 		<script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 	
 	</div>
+    
 	</center>
-	
+			
+	<script src="js/saveload.js"></script>
 	<script src="js/sudoku.js"></script>
 	<script src="js/main.js"></script>
 

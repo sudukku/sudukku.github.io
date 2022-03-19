@@ -198,6 +198,8 @@ Sudoku = (function (window, document, undefined) {
         this.clone = function(){
             var cloneTable = new Table();
             for(var i=0; i<81; i++){
+                //console.log(this.cells[i].value+"-"+this.cells[i].isClue);
+
                 cloneTable.cells[i].value = this.cells[i].value;
                 cloneTable.cells[i].isClue = this.cells[i].isClue;
             }
@@ -213,6 +215,8 @@ Sudoku = (function (window, document, undefined) {
                         retval += "[" + 'x123456789'[this.cells[i*9 + j].value] + "]";
                     else
                         retval += " " + this.cells[i*9 + j].value + " ";
+
+                    //console.log(this.cells[i*9 + j].value+"-"+this.cells[i*9 + j].isClue);
                 }
                 retval += "\n";
             }
@@ -221,6 +225,7 @@ Sudoku = (function (window, document, undefined) {
         this.load = function(str){
             for(var i=0; i<81; i++){
                 var number = parseInt(str[i]);
+                //console.log(number);
                 this.cells[i].value = number;
                 this.cells[i].isClue = (number != 0);
                 this.cells[i].isUserInput = false;

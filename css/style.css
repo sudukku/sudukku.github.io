@@ -99,7 +99,7 @@ button, td {
 }
 
 .title-wall{
-	background-color:#328ffa;
+	background-color:#99CCFF;
 	height: 6PX;
 	border-radius: 3px;
 }
@@ -132,7 +132,7 @@ button, td {
 	background: #fff;
 	border-radius: 5px;
 	box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.4);
-	top:50%;
+	top:300px;
 	left:50%;
 	transform: translate(-50%,-50%); 
 
@@ -196,10 +196,13 @@ button, td {
 }
 
 .pause-screen{
+	position: absolute;
+	left: 0px;
+	top: 0px;
 	width: 100%;
 	height: 100%;
-	background: rgba(255,255,255,1);
-	z-index: 99;
+	background: rgba(255,255,255,1.0);
+	z-index: 100;
 	box-sizing:border-box;
 	display: none;
 }
@@ -305,7 +308,7 @@ button, td {
 
 .numpad-table{
 	width: 100%;
-	border: 2px solid #328ffa;
+	border: 2px solid #99CCFF;
 }
 
 .numpad-table tr{
@@ -356,9 +359,9 @@ button, td {
 
 .functable{
 	width: 100%;
-	border-right: 2px solid #328ffa;
-	border-bottom: 2px solid #328ffa;
-	border-left: 2px solid #328ffa;
+	border-right: 2px solid #99CCFF;
+	border-bottom: 2px solid #99CCFF;
+	border-left: 2px solid #99CCFF;
 	background:rgba(255,255,255,1);
 }
 
@@ -478,7 +481,7 @@ button, td {
 
 .block-border td{
 	/*border:3px solid #35506F;*/
-	border:3px solid #328ffa;
+	border:3px solid #99CCFF;
 }
 
 .cells td {
@@ -545,19 +548,26 @@ button, td {
 
 .select{
 	/*background:#a8d8ff;*/
+	
 	-webkit-transform:scale(1.2);
     -moz-transform:scale(1.2);
     -ms-transform:scale(1.2);   
     -o-transform:scale(1.2);
     transform:scale(1.2);
+   
 
-    z-index: 10;
-	background:#328ffa;
+    z-index: 20;
+    /*box-shadow:0px 0px 5px 3px #99CCFF inset;*/
+	
+	/*background:#328ffa;*/
+	background:#99CCFF;
+	color:#fff;
 	opacity: 1.0;
 }
 
 .error {
 	background:#f2dede;
+	opacity: 1.0;
 }
 
 .numpad.solved-number{

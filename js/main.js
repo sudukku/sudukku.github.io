@@ -1,7 +1,4 @@
-(function ($, window, document, undefined) {
-
-
-			$.Sudoku = function (game) {
+	var game = new Sudoku();
 
 				var generatingLevel = 0;
 				var playingLevel = 0;
@@ -16,50 +13,34 @@
 
 				var game_end = false;
 
-				var level_label = ['beginners Sudoku', 'easy Sudoku', 'normal Sudoku', 'hard Sudoku', '17-clue Sudoku'];
-				var generate_label = function () { return 'Start ' + level_label[generatingLevel] };
+				//game data
+				var gametable_ = new Array();
+
+				var level_label = ['beginners', 'easy', 'normal', 'hard'];
+				//var generate_label = function () { return 'Start ' + level_label[generatingLevel] };
+
+
+				//var $this = $(".sudoku");
+
+				var $menubtn =$(".menu-btn");
+				var $overlay = $(".overlay");
+				var $playRecord = $(".play-record");
+				var $pauseBtn = $(".pause-btn");
+
+
+				var $pausescrean = $(".pause-screen");
+				var $screanbtn = $(".screen-btn");
+
+
+				var $notebtn =$(".notebtn");
+				var $erasebtn =$(".erasebtn");
+
+				var $bottomline = $(".menu menu-bottom");
 
 
 				// Build html structure first
-				//
-				var $this = $('<div class="sudoku">');
-				var $generator = $('<button class="btn-generate initial" title="swipe left/right to change level">' + generate_label() + '</button>');
-				var $btnEasier = $('<button class="btn-difficulty btn-easier"><i class="fa fa-arrow-left"></i></button>');
-				var $btnHarder = $('<button class="btn-difficulty btn-harder"><i class="fa fa-arrow-right"></i></button>');
-				var $info = $('<div class="sudoku-info"></div>');
-				var $overlay = $('<div class="overlay layer"><div class="message"></div><div class="record"></div><div class="record-level"></div></div>');
-
-				//var $noteMode = $('<div class="note">note</div>');
-
-
-				var $toptable = $('<table class="toptable"></table>');
-				var $toptr = $('<tr></tr>');
-				var $toptd1 = $('<td></td>');
-				var $toptd2 = $('<td></td>');
-				var $toptd3 = $('<td></td>');
-
-				var $menubtn =$('<img class="menu-btn" src="img/menu.png">');
-				var $logo =$('<img class="logo" src="img/logo.png">');
-				var $lvLabel =$('<div class="lv-label"></div>');
-				var $playRecord = $('<div class="play-record">00:00:00</div>');
-				var $pauseBtn = $('<img class="pause-btn" src="img/pause.png">');
-
-				$toptd1.append($menubtn);
-				$toptd1.append($logo);
-				$toptd2.append($lvLabel);
-				$toptd3.append($pauseBtn);
-				$toptd3.append($playRecord);
-				$toptr.append($toptd1);
-				$toptr.append($toptd2);
-				$toptr.append($toptd3);
-				$toptable.append($toptr);
-
-				var $pausescrean = $('<div class="pause-screen layer"></div>');
-				var $screanbtn = $('<img class="screen-btn" src="img/resumeL.png">');
-				$pausescrean.append($screanbtn);
-
-				var $cells = $('<table class="cells layer">'),
-					$clickables = $('<table class="clickables layer">');
+				var $cells = $(".cells");
+				var	$clickables = $(".clickables");
 				for (var i = 0; i < 9; i++) {
 					var $tr = $('<tr>');
 					for (var j = 0; j < 9; j++) {
@@ -69,10 +50,11 @@
 					}
 					$cells.append($tr);
 					$clickables.append($tr.clone(true, true));
+
 				}
 
-				var $blockBg = $('<table class="block-bg layer">'),
-					$blockBorder = $('<table class="block-border layer">');
+				var $blockBg = $(".block-bg");
+				var	$blockBorder = $(".block-border ");
 				for (var i = 0; i < 3; i++) {
 					var $tr = $('<tr>');
 					for (var j = 0; j < 3; j++) {
@@ -85,71 +67,6 @@
 				}
 
 
-				var $bottomline = $('<div class="menu menu-bottom"></div>');
-
-				var $numpadscrean = $('<div class="numpad-screen"></div>');
-				$bottomline.append($numpadscrean);
-
-
-				var $bottomtable = $('<table class="numpad-table"></table>');
-				var $bottomtr = $('<tr></tr>');
-				for (var i = 1; i <= 9; i++) {
-					var $btn = $('<button class="numpad numpad-' + i + '">' + i + '</button>').data('number', i);
-					//if (i == 1) $btn.addClass('numpad-selected');
-					var $bottomtd = $('<td></td>');
-					$bottomtd.append($btn);
-					$bottomtr.append($bottomtd);
-				}
-				$bottomtable.append($bottomtr);
-				$bottomline.append($bottomtable);
-
-				//var $funcline = $('<div class="func func-bottom"></div>');
-				var $functable = $('<table class="functable"></table>');
-				var $functr = $('<tr></tr>');
-				var $functd1 = $('<td></td>');
-				var $functd2 = $('<td></td>');
-				var $functd3 = $('<td></td>');
-				var $notebtn =$('<div class="funcbtn"></div>');
-				var $noteimg =$('<img class="funcimg noteimg" src="img/noteoff.png">');
-				var $notelv =$('<div class="notelv" >노트</div>');
-				var $erasebtn =$('<div class="funcbtn"></div>');
-				var $eraseimg =$('<img class="funcimg" src="img/erase.png">');
-				var $eraselv =$('<div class="eraselv">지우기</div>');
-				//var $undobtn =$('<button class="funcbtn undobtn">undo</button>');
-
-				$notebtn.append($noteimg);
-				$notebtn.append($notelv);
-				$erasebtn.append($eraseimg);
-				$erasebtn.append($eraselv);
-				//$functd3.append($undob);
-
-				$functd1.append($notebtn);
-				$functd2.append($erasebtn);
-				//$functd3.append($undobtn);
-
-				$functr.append($functd1);
-				$functr.append($functd2);
-				//$functr.append($functd3);
-				$functable.append($functr);
-				$bottomline.append($functable);
-				//$funcline.append($functable);
-				//Assembly html
-				//
-				$this.append(
-					$('<div class="menu menu-top">'))
-					//.append($info)
-					.append($toptable)
-					.append($('<div class="table-container">')
-					.append($blockBg)
-					.append($cells)
-					.append($blockBorder)
-					.append($clickables)
-					.append($overlay)
-					.append($pausescrean)
-					)
-				$this.append($bottomline);
-
-
 				// Define all actions
 				//
 				function renderGameTable() {
@@ -158,10 +75,20 @@
 					//Reset number pads
 					$('.solved-number').removeClass('solved-number');
 
+					//$cells = getCookie("cells");
+					//console.log($cells);
+
+					
+
 					//Reset cells
 					var num_clues = 0;
 					$cells.find('.note').remove();
 					$cells.find('td').removeClass().each(function (index) {
+
+						//console.log(game.table.cells[index].value+"-"+game.table.cells[index].isClue);
+
+
+
 						if (game.table.cells[index].isClue) {
 							num_clues++;
 							$(this).html(game.table.cells[index].value).addClass('clue number-' + game.table.cells[index].value);
@@ -170,6 +97,10 @@
 							$(this).html('<span class="input"></div>');
 						}
 					});
+
+
+					//console.log(game.table.cells);
+					//console.log(load_cookie("gametable"));
 					//$info.html(' ' + num_clues + ' clues ');
 					//$info.append($('<span class="btn-link">restart</span>').click(function () { renderGameTable() }));
 
@@ -209,10 +140,154 @@
 
 				}
 
+				function saveInitGame(){
+					localStorage.removeItem('sudk_table');    //퍼즐 테이블정보
+					localStorage.removeItem('sudk_cells');    //게임 테이블정보
+					//localStorage.removeItem('clickables', $clickables.html());
+					//localStorage.removeItem('blockBg', $blockBg.html());
+					//localStorage.removeItem('blockBorder', $blockBorder.html());
+					localStorage.removeItem('sudk_info');  //게임정보 시간, 레벨
+				}
+
+
+				function saveGameData(){
+					gametable_ = [];
+					for (var i = 0; i < 81; i++) {
+						var data = new Object();
+				        data.value = game.table.cells[i].value;
+				        data.isClue = game.table.cells[i].isClue;
+				        //data.isUserInput = game.table.cells[i].isUserInput;
+				        gametable_.push(data);
+			    	}
+					var gametableData = JSON.stringify(gametable_);
+
+
+					var info = new Object();
+					info.time = parseInt($playRecord.data('record'));
+					info.lv = playingLevel;
+					var infoData = JSON.stringify(info);
+
+					localStorage.setItem('sudk_table', gametableData);    //퍼즐 테이블정보
+					localStorage.setItem('sudk_cells', $cells.html());    //게임 테이블정보
+					//localStorage.setItem('clickables', $clickables.html());
+					//localStorage.setItem('blockBg', $blockBg.html());
+					//localStorage.setItem('blockBorder', $blockBorder.html());
+		
+					localStorage.setItem('sudk_info', infoData);  //게임정보 시간, 레벨
+
+				}
+
+
+				function loadGameData() {
+					$overlay.fadeOut();
+
+					//Reset number pads
+					$('.solved-number').removeClass('solved-number');
+
+					gametables_ = JSON.parse(localStorage.getItem('sudk_table'));
+					var infoData = JSON.parse(localStorage.getItem('sudk_info'));
+
+					//$gametables = Cookies.get("gametable");
+					//console.log("load: "+gametables);
+
+					playingLevel = infoData.lv;  //레벨
+					record_ = infoData.time;    //시간
+
+
+					cells = localStorage.getItem('sudk_cells');
+					//clickables =localStorage.getItem('clickables');
+					//blockBg =localStorage.getItem('blockBg');
+					//blockBorder =localStorage.getItem('blockBorder');
+
+
+					//Reset cells
+					var num_clues = 0;
+
+					$cells.find('.note').remove();
+					$cells.html("");
+					$cells.html(cells);  //게임테이블 로드
+
+
+					lvlabel(playingLevel);
+
+					
+					$cells.find('td').each(function (index) {
+						game.table.cells[index].value = gametables_[index].value;
+						game.table.cells[index].isClue = gametables_[index].isClue;
+						//game.table.cells[index].isUserInput = gametables_[index].isUserInput;
+						
+						if (game.table.cells[index].isClue) {
+							num_clues++;
+							$(this).html(game.table.cells[index].value).addClass('clue number-' + game.table.cells[index].value);
+						} else {
+							if($(this).find('.input').html()==''){  //값이 없다면 입력
+								game.table.cells[index].isUserInput = false;
+								console.log(gametables_[index].value);
+							}else{
+								game.table.cells[index].isUserInput = true;
+							}
+
+							$(this).removeClass('select');
+
+						}
+
+					});
+					
+
+
+					current_state = 1;
+					game_end = false;
+					$('.pause-btn').attr("src", "img/pause.png"); // pause btn set
+					$('.new-popup').hide();
+					$('.pause-screen').hide();  //screen hide
+					$('.numpad-screen').hide(); //screen hide
+
+ 
+					$playRecord.data('record', record_);
+					clearInterval($playRecord.data('timer'));
+					//$playRecord.html(' 00:00:00 ');
+
+					timer = function () {
+						$playRecord.data('record', $playRecord.data('record') + 1);
+						var record = $playRecord.data('record');
+						var hour = parseInt(record / 3600);
+						var min = parseInt((record / 60)) % 60;
+						var sec = record % 60;
+						if (hour < 10) hour = '0' + hour;
+						if (min < 10) min = '0' + min;
+						if (sec < 10) sec = '0' + sec;
+						$playRecord.html(' ' + hour + ':' + min + ':' + sec + ' ');
+					}
+					$playRecord.data('timer', setInterval(timer, 1000));
+
+					$('.number-' + playingNumber).addClass('active-number');
+					for (var i = 1; i <= 9; i++) {
+						if ($('.number-' + i).length == 9)
+							$('.numpad-' + i + ', .number-' + i).addClass('solved-number');
+					}
+
+				}
+
 				function pause(){
+
+					$cells.find('td.select').removeClass('select');
+
 					$('.pause-btn').attr("src", "img/resume.png");
 					$('.pause-screen').show();
 					$('.numpad-screen').show();
+
+					
+
+					/*
+					for (var i = 0; i < 81; i++) {
+						var $c = $cells.find('td').eq(i);
+						if($c.find('td.select')){
+							$c.removeClass('select');
+							console.log(i);
+						}
+					}
+					*/
+
 					clearInterval($playRecord.data('timer'));
 				}
 
@@ -262,9 +337,11 @@
 				}
 
 				function titlePopupClose(){
+					/*
 					if($(".title-popup").css("display") != "none"){
 						$(".title-popup").fadeOut(300);
 					}
+					*/
 				}
 
 				function lvlabel(l){
@@ -298,25 +375,30 @@
 				});
 				$(".beginner-btn").click(function(){
 					//alert("B");
+					saveInitGame();
 					puzzleGenerator(0);
 					titlePopupClose();
 				});
 				$(".easy-btn").click(function(){ 
 					//alert("E");
+					saveInitGame();
 					puzzleGenerator(1);
 					titlePopupClose();
 				});
 				$(".normal-btn").click(function(){ 
 					//alert("N");
+					saveInitGame();
 					puzzleGenerator(2);
 					titlePopupClose();
 				});
 				$(".hard-btn").click(function(){ 
 					//alert("H");
+					saveInitGame();
 					puzzleGenerator(3);
 					titlePopupClose();
 				});
 				$(".reset-btn").click(function(){ 
+					saveInitGame();
 					renderGameTable();
 				});
 				$(".close-btn").click(function(){
@@ -327,7 +409,19 @@
 					$('.menu-popup').fadeOut(300);
 				});
 
+				/*
+				$(".save").click(function(){
+					saveGameData();
+				});
 
+				$(".load").click(function(){
+					//alert("load");
+					loadGameData();
+				});
+				*/
+
+
+				
 				$pauseBtn.click(function(){   //toggle
 					//alert("ok");
 					if(!game_end){
@@ -342,6 +436,7 @@
 					}
 					
 				});
+				
 
 				$screanbtn.click(function(){
 					if(current_state!=1){
@@ -380,6 +475,7 @@
 					current_cell.removeClass();
 
 					cellcheck();
+					saveGameData();
 					
 					if(current_cell!=null){
 						current_cell.addClass('select');
@@ -431,11 +527,15 @@
 				}).on('contextmenu', function () { return false; })
 
 
-				$bottomline.find('.numpad').on('click', function (e) {   // <- numnber pad
+				//$bottomline.find('.numpad').on('click', function (e) {   // <- numnber pad
+				$('.numpad').on('click', function (e) {   // <- numnber pad
+					
 					//$('.numpad-selected').removeClass('numpad-selected');
 					//$(this).addClass('numpad-selected');
 					$('.active-number').removeClass('active-number');
 					$('.number-' + $(this).data('number')).addClass('active-number');
+
+
 
 					var Pnumber = $(this).data('number');
 
@@ -516,7 +616,10 @@
 					}
 
 
+					//cellcheck();
+					saveGameData();
 					cellcheck();
+
 
 					if(current_cell!=null){
 						current_cell.addClass('select');
@@ -558,6 +661,7 @@
 					}
 					
 
+					//game end
 					if ($('.numpad.solved-number').length == 9) {
 						clearInterval($playRecord.data('timer'));
 						$overlay.find('.record').html($playRecord.html());
@@ -567,20 +671,43 @@
 
 						$('.numpad-screen').show(); //numpad Shutter
 						game_end = true; //game end
+						saveInitGame(); //gameSave reset
+						return;
 					}
 				}/////cell check
 
 				$(window).focus(function() {
-				  //console.log("on");
+
+				  	console.log("resume");
+				  	if(!game_end){
+				  		resume();
+				  		current_state= 1;
+					}
 				});
 
 				$(window).blur(function() {
-				  	//console.log("out");
+				  	console.log("pause");
 				  	if(!game_end){
 				  		pause();
-				 	 	current_state=-1;
+				  		//saveGameData();  //게임저장
+				 	 	current_state= -1;
 				    }
 				});
+
+
+
+				//start
+				if(localStorage.getItem('sudk_info')!=null){
+					//alert("load");
+
+					loadGameData();
+					titlePopupClose();
+				}else{
+					//alert("new");
+					saveInitGame();
+					puzzleGenerator(0);
+					titlePopupClose();
+				}
 
 
 /*
@@ -600,27 +727,3 @@
 					}
 				});
 */
-
-				return $this;
-			}
-		})($, window, document);
-
-		var game = new Sudoku();
-		var $sudoku = $.Sudoku(game);
-		$('#GameView').append($sudoku);
-		$('#contents').toggle(!isEmbed(getUrlParams(location.search)));
-
-		function getUrlParams(search) {
-			return search.substr(1).split('&')
-				.map(function (part) {
-					return part.split('=')
-				})
-				.reduce(function (result, item) {
-					if (item[0]) result[item[0]] = decodeURIComponent(item[1]);
-					return result;
-				}, {});
-		}
-
-		function isEmbed(urlParams) {
-			return urlParams.hasOwnProperty('embed')
-		}
