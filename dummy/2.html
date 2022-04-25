@@ -1,0 +1,79 @@
+<html>
+<head>
+</head>
+<body>
+Office 365에서는 ImmutableID 속성을 사용하여 사용자를 고유하게 식별합니다. SSO가 Google과 Office 365 간에 작동하려면 각 Office 365 사용자에게 ImmutableId가 있어야 하며, SSO 중에 Office 365로 전송된 SAML 이름 ID 속성은 ImmutableId와 동일해야 합니다.
+
+Office 365 사용자 ImmutableID는 사용자 생성 방법에 따라 달라집니다. 다음은 가장 가능성이 높은 시나리오입니다.
+
+Office 365에 사용자가 없으며 사용자를 자동 프로비저닝하도록 Google을 설정한 경우, ImmutableID를 구성할 필요가 없으며 Immutable ID는 기본적으로 사용자의 이메일 주소(사용자 기본 이름 또는 UPN)에 매핑됩니다. 아래 2단계로 진행합니다.
+Office 365 관리 콘솔에서 사용자가 생성된 경우 ImmutableID는 비워 두어야 합니다. 이러한 사용자의 경우 PowerShell Set-MsolUser 명령어를 사용하여 다음과 같이 사용자의 UPN과 일치하도록 Office 365의 ImmutableID를 설정합니다. 
+Set-MsolUser -UserPrincipalName testuser@yourdomain.com -ImmutableId testuser@yourdomain.com
+
+Set-MsolUser를 사용하여 모든 사용자를 일괄 업데이트할 수도 있습니다. 구체적인 안내는 Microsoft PowerShell 설명서를 참고하세요.
+
+Azure Active Directory 동기화를 통해 사용자가 생성된 경우 ImmutableID는 Active Directory objectGUID의 인코딩된 버전입니다. 이러한 사용자의 경우 다음이 적용됩니다.
+PowerShell을 사용하여 Azure AD에서 ImmutableID를 검색할 수 있습니다. 예를 들어 모든 사용자의 ImmutableID를 검색하고 다음과 같이 CSV 파일로 내보냅니다.
+$exportUsers = Get-MsolUser -All | Select-Object UserprincipalName, ImmutableID | Export-Csv C:\csvfile
+
+Google에서 맞춤 속성을 만든 다음 Office 365 ImmuntableID를 각 사용자의 프로필에 입력합니다. 자세한 내용은 새 맞춤 속성 추가하기 및 사용자 프로필 업데이트하기를 참고하세요. 또한 GAM(오픈소스 명령줄 도구) 또는 Workspace Admin SDK를 사용하여 프로세스를 자동화할 수도 있습니다.
+ImmutableID에 관해 자세히 알아보려면 Microsoft 설명서를 참고하세요.
+
+Google 관리 콘솔에 로그인하세요.
+현재 계정(choojun13@gmail.com)이 아닌 최고 관리자 권한이 있는 계정을 사용하여 로그인하세요.
+
+관리 콘솔 홈페이지에서 보안그런 다음SAML 애플리케이션에 싱글 사인온(SSO) 설정으로 이동합니다.
+이 작업을 수행하려면 최고 관리자로 로그인해야 합니다.
+
+싱글 사인온(SSO) 설정 섹션에서 SSO URL 및 엔티티 ID를 복사하고 저장한 후 인증서를 다운로드합니다.
+그런 다음 Office 365로 전환하여 3단계의 설정 단계를 수행하고 아래 4단계의 관리 콘솔로 돌아가서 SSO 구성을 완료합니다.
+
+새 브라우저 탭에서 관리자로 Office 365 애플리케이션에 로그인합니다.
+텍스트 편집기를 사용하여 Google에서 복사한 IdP 데이터에서 PowerShell 변수를 만듭니다. 다음은 각 변수에 필요한 값입니다.
+변수	값
+$DomainName	'yourdomain.com'
+$FederationBrandName	'Google Cloud ID'(또는 선택한 값)
+$Authentication	'Federated'
+$PassiveLogOnUrl
+$ActiveLogOnUri 	'SSO URL'(Google IDP 정보에서)
+$SigningCertificate	'여기에 전체 인증서 붙여넣기'(Google IdP 정보에서)*
+$IssuerURI	'엔티티 ID'(Google IdP 정보에서)
+$LogOffUri	'https://accounts.google.com/logout'
+$PreferredAuthenticationProtocol	'SAMLP'$SigningCertifcate 변수가 하나의 텍스트 행에 있는지 확인하세요. 그렇지 않으면 PowerShell에서 오류 메시지를 반환합니다.
+PowerShell 콘솔을 사용하여 Set-MsolDomainAuthentication 명령어를 실행하여 페더레이션을 위한 Active Directory 도메인을 구성합니다. 구체적인 안내는 Microsoft PowerShell 설명서를 참고하세요.
+(선택사항) 페더레이션 설정을 테스트하려면 다음 PowerShell 명령어를 사용합니다. 
+Get-MSolDomainFederationSettings -DomainName yourdomain.com | Format-List *
+
+참고: 도메인이 이미 페더레이션되어 있고 이를 Google로 변경해야 하는 경우 위의 표에 나열된 것과 동일한 매개변수를 사용하여
+
+Google 관리 콘솔에 로그인하세요.
+현재 계정(choojun13@gmail.com)이 아닌 최고 관리자 권한이 있는 계정을 사용하여 로그인하세요.
+
+관리 콘솔 홈페이지에서 앱그런 다음웹 및 모바일 앱으로 이동합니다.
+앱 추가다음앱 검색을 클릭합니다.
+검색창에 Office 365를 입력합니다.
+검색결과에서 Office 365 SAML 앱으로 마우스를 가져가 선택을 클릭합니다.
+Google ID 공급업체 세부정보 페이지에서 계속을 클릭합니다.
+서비스 제공업체 세부정보 페이지에서 다음을 수행합니다.
+서명된 응답을 선택합니다.
+이름 ID 형식을 'PERSISTENT'로 설정합니다.
+맞춤 속성을 만들어 Google 사용자 프로필에 Office 365 ImmutableID를 추가하려는 경우(위의 1단계 참고) 맞춤 속성을 이름 ID로 선택하세요. 그렇지 않으면 이름 ID를 Basic Information > Primary email로 설정하세요.
+계속을 클릭합니다.
+속성 매핑 페이지에서 필드 선택 메뉴를 클릭하고 다음 Google 디렉터리 속성을 해당 Office 365 속성에 매핑합니다.
+ 
+Google 디렉터리 속성	Office 365 속성
+Basic Information > Primary Email	IDPEmail
+(선택사항) SAML 응답에 사용자의 그룹 멤버십 정보를 전송하려면 그룹 멤버십 입력란에 앱과 관련된 그룹 이름을 입력합니다.
+이 기능은 현재 베타 버전이며 아직 일부 고객에게만 제공됩니다.
+
+Google 그룹스에서 그룹 추가 입력란을 클릭합니다.
+그룹 이름의 글자를 하나 이상 입력합니다.
+드롭다운 메뉴에서 그룹 이름을 선택합니다.
+필요한 경우 그룹을 추가합니다(총 그룹 수는 75개를 초과할 수 없음).
+[app name] 속성 아래에서 서비스 제공업체의 해당 그룹 속성 이름을 입력합니다.
+참고: 입력한 그룹 이름 수와 상관없이 SAML 응답에는 사용자가 직속 또는 비직속 회원인 그룹만 포함됩니다. 자세한 내용은 그룹 멤버십 매핑 정보를 참고하세요.
+
+마침을 클릭합니다.
+
+</body>
+</html>
